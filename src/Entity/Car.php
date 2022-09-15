@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CarRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,8 +27,33 @@ class Car
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
-    #[ORM\OneToOne(inversedBy: 'car', targetEntity: Pilote::class, cascade: ['persist'])]
-    private ?Pilote $pilote = null;
+    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Pilote::class)]
+    private Collection $pilotes;
+
+//    #[ORM\OneToOne(inversedBy: 'car', targetEntity: Pilote::class, cascade: ['persist'])]
+//    private ?Pilote $pilote = null;
+
+
+    public function __construct()
+    {
+        $this->pilotes = new ArrayCollection();
+    }
+
+
+    public function __toString() : string
+    {
+//        return (string) "Car Number :" . $this->pilotes?->getNumber() . " || " . $this->power . " HP";
+        if($this->pilotes->isEmpty()){
+            return (string) $this->team->getName() . " Team car || ";
+        }else{
+            $pilotes = null;
+            foreach ($this->pilotes as $p){
+                $pilotes = $pilotes .$p."  ";
+            }
+            return (string) "Car driven by :" . $pilotes ;
+        }
+
+    }
 
     public function getId(): ?int
     {
@@ -69,24 +96,54 @@ class Car
         return $this;
     }
 
-    public function getPilote(): ?Pilote
+//    public function getPilote(): ?Pilote
+//    {
+//        return $this->pilote;
+//    }
+//
+//    public function setPilote(?Pilote $pilote): self
+//    {
+//        // unset the owning side of the relation if necessary
+//        if ($pilote === null && $this->pilote !== null) {
+//            $this->pilote->setCar(null);
+//        }
+//
+//        // set the owning side of the relation if necessary
+//        if ($pilote !== null && $pilote->getCar() !== $this) {
+//            $pilote->setCar($this);
+//        }
+//
+//        $this->pilote = $pilote;
+//
+//        return $this;
+//    }
+
+    /**
+     * @return Collection<int, Pilote>
+     */
+    public function getPilotes(): Collection
     {
-        return $this->pilote;
+        return $this->pilotes;
     }
 
-    public function setPilote(?Pilote $pilote): self
+    public function addPilote(Pilote $pilote): self
     {
-        // unset the owning side of the relation if necessary
-        if ($pilote === null && $this->pilote !== null) {
-            $this->pilote->setCar(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($pilote !== null && $pilote->getCar() !== $this) {
+        if (!$this->pilotes->contains($pilote)) {
+            $this->pilotes->add($pilote);
             $pilote->setCar($this);
         }
 
-        $this->pilote = $pilote;
+        return $this;
+    }
+
+    public function removePilote(Pilote $pilote): self
+    {
+        if ($this->pilotes->removeElement($pilote)) {
+            // set the owning side to null (unless already changed)
+            if ($pilote->getCar() === $this) {
+                $pilote->setCar(null);
+            }
+        }
 
         return $this;
     }

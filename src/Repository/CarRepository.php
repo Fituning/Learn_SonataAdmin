@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Car;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use http\QueryString;
 
 /**
  * @extends ServiceEntityRepository<Car>
@@ -38,6 +40,33 @@ class CarRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+//    public function findAllEmptyQuery(): Query
+//    {
+////        $qb = $this->createQueryBuilder('c');
+//////        $qb->andWhere($qb->expr()->count("c.pilotes"));
+////        $qb->andWhere("c.color < 2");
+////        $qb = $this->createQueryBuilder('c');
+////        SELECT *, COUNT(race__pilote.car_id) FROM `race__car` JOIN race__pilote On race__car.id = race__pilote.car_id GROUP by race__pilote.car_id HAVING  COUNT(race__pilote.car_id) < 2;
+////        $qb = $this->createQueryBuilder('c');
+////        $qb
+//////            ->select('*, COUNT(race__pilote.car_id)')
+//////            ->from('UserBundle:race__car','c')
+////            ->join('Pilote:race__pilote','p')
+////            ->groupBy('p.car_id')
+////            ->having('COUNT(p.car_id) < 2')
+////
+//////        ;
+////        $qb = $this->createQueryBuilder('c')
+////            ->select('p')
+////            ->from('Pilote','p')
+////
+////        ;
+////
+////        dump($qb->getQuery()->getDQL());
+////        dd($qb->getQuery()->getSQL());
+//        return $qb->getQuery();
+//    }
 
 //    /**
 //     * @return Car[] Returns an array of Car objects

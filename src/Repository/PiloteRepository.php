@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Pilote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * @extends ServiceEntityRepository<Pilote>
@@ -37,6 +39,20 @@ class PiloteRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+        #[NoReturn] public function findAllEmptyQuery(int $number): Query
+        {
+        $qb = $this->createQueryBuilder('p');
+        $qb->join('p.car','c')
+            ->groupBy('c.id')
+            ->having('COUNT(c.id) < '.$number)
+            ->andHaving('c.id = null')
+        ;
+
+        dump($qb->getQuery()->getDQL());
+        dd($qb->getQuery()->getSQL());
+        return $qb->getQuery();
     }
 
 //    /**

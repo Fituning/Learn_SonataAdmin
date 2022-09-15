@@ -24,11 +24,20 @@ class Pilote
     #[ORM\Column(length: 255)]
     private ?string $country = null;
 
-    #[ORM\OneToOne(mappedBy: Car::class, targetEntity: Car::class, cascade: ['persist', 'remove'])]
-    private ?Car $car = null;
+//    #[ORM\OneToOne(mappedBy: "pilote", targetEntity: Car::class, cascade: ['persist', 'remove'])]
+//    private ?Car $car = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $piloteNumber = null;
+    private ?int $number = null;
+
+    #[ORM\ManyToOne(targetEntity: Car::class, inversedBy: 'pilotes')]
+    private ?Car $car = null;
+
+    public function __toString() : string
+    {
+        return (string) $this->firstName . " " . $this->lastName . " n°" . $this->number;
+    }
+
 
     public function getId(): ?int
     {
@@ -83,14 +92,14 @@ class Pilote
         return $this;
     }
 
-    public function getPiloteNumber(): ?int
+    public function getNumber(): ?int
     {
-        return $this->piloteNumber;
+        return $this->number;
     }
 
-    public function setPiloteNumber(int $piloteNumber): self
+    public function setNumber(int $number): self
     {
-        $this->piloteNumber = $piloteNumber;
+        $this->number = $number;
 
         return $this;
     }

@@ -22,3 +22,19 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+# config/services.yaml
+
+    admin.Pilote:
+        class: App\Admin\PiloteAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Pilote, manager_type: orm, label: "Pilote" }
+
+    admin.Car:
+        class: App\Admin\CarAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Car, manager_type: orm, label: 'Car' }
+
+    admin.Team:
+        class: App\Admin\TeamAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Team, manager_type: orm, label: 'Team' }
