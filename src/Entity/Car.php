@@ -27,7 +27,7 @@ class Car
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
-    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Pilote::class)]
+    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Pilote::class, cascade:["persist", "remove"])]
     private Collection $pilotes;
 
 //    #[ORM\OneToOne(inversedBy: 'car', targetEntity: Pilote::class, cascade: ['persist'])]

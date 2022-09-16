@@ -18,6 +18,12 @@ class PiloteType extends AbstractType
         ;
     }
 
+    public function getBlockPrefix() : string
+    {
+        return 'pilote';
+    }
+
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

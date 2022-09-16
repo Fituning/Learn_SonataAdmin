@@ -33,6 +33,11 @@ class Team
         $this->cars = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return (string)  $this->name . "  in ". $this->headOffice;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

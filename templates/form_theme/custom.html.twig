@@ -1,0 +1,22 @@
+{% block custom_collection_widget %}
+
+    <div data-controller="collection"
+         data-collection-prototype-value="{{ form_widget(prototype)|e('html_attr') }}"
+    >
+        <div data-collection-target="list">
+            {% for child in form.children %}
+                {{- form_widget(child) -}}
+            {% endfor %}
+        </div>
+        <button type="button" data-collection-target="addBtn" data-action="click->collection#add">add</button>
+    </div>
+{% endblock %}
+
+{% block pilote_widget %}
+    <div data-collection-target="item">
+        {{- block('form_widget') -}}
+        <button type="button" data-collection-target="deleteBtn" data-action="click->collection#delete">
+            remove
+        </button>
+    </div>
+{% endblock %}

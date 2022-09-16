@@ -43,15 +43,19 @@ class PiloteRepository extends ServiceEntityRepository
 
         #[NoReturn] public function findAllEmptyQuery(int $number): Query
         {
+//            SELECT * FROM  `race__car` , race__pilote where race__car.id not in (SELECT car_id from race__pilote) or race__car.id = race__pilote.car_id GROUP by race__car.id;
         $qb = $this->createQueryBuilder('p');
-        $qb->join('p.car','c')
+        $qb
+            ->addSelect('c' )
+            ->from('App:Car', 'c')
+            ->andWhere($qb->expr()->notIn('c', 'p.car'))
+            ->orWhere('c = p.car')
+            ->Having('COUNT(p.car) < 3')
             ->groupBy('c.id')
-            ->having('COUNT(c.id) < '.$number)
-            ->andHaving('c.id = null')
         ;
 
-        dump($qb->getQuery()->getDQL());
-        dd($qb->getQuery()->getSQL());
+//        dump($qb->getQuery()->getDQL());
+//        dd($qb->getQuery()->getSQL());
         return $qb->getQuery();
     }
 
