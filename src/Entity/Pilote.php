@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PiloteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -30,8 +32,17 @@ class Pilote
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $number = null;
 
-    #[ORM\ManyToOne(targetEntity: Car::class, inversedBy: 'pilotes')]
-    private ?Car $car = null;
+    #[ORM\ManyToMany(targetEntity: Car::class, mappedBy: 'pilotes')]
+    private Collection $cars;
+
+
+//    #[ORM\ManyToMany(targetEntity: Car::class, inversedBy: 'pilotes')]
+//    private ?Car $car = null;
+
+    public function __construct()
+    {
+        $this->cars = new ArrayCollection();
+    }
 
     public function __toString() : string
     {
@@ -80,17 +91,17 @@ class Pilote
         return $this;
     }
 
-    public function getCar(): ?Car
-    {
-        return $this->car;
-    }
-
-    public function setCar(?Car $car): self
-    {
-        $this->car = $car;
-
-        return $this;
-    }
+//    public function getCar(): ?Car
+//    {
+//        return $this->car;
+//    }
+//
+//    public function setCar(?Car $car): self
+//    {
+//        $this->car = $car;
+//
+//        return $this;
+//    }
 
     public function getNumber(): ?int
     {
@@ -100,6 +111,33 @@ class Pilote
     public function setNumber(int $number): self
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Car>
+     */
+    public function getCars(): Collection
+    {
+        return $this->cars;
+    }
+
+    public function addCar(Car $car): self
+    {
+        if (!$this->cars->contains($car)) {
+            $this->cars->add($car);
+            $car->addPilote($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCar(Car $car): self
+    {
+        if ($this->cars->removeElement($car)) {
+            $car->removePilote($this);
+        }
 
         return $this;
     }

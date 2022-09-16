@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use http\QueryString;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * @extends ServiceEntityRepository<Car>
@@ -39,6 +40,19 @@ class CarRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    #[NoReturn] public function findManyToManyQuery(): Query
+    {
+//            SELECT * FROM  `race__car` , race__pilote where race__car.id not in (SELECT car_id from race__pilote) or race__car.id = race__pilote.car_id GROUP by race__car.id;
+        $qb = $this->createQueryBuilder('c');
+        $qb
+            ->leftJoin('c.pilotes', 'p')
+        ;
+
+//                dump($qb->getQuery()->getDQL());
+//                dd($qb->getQuery()->getSQL());
+        return $qb->getQuery();
     }
 
 //    public function findAllEmptyQuery(): Query

@@ -41,8 +41,8 @@ class PiloteRepository extends ServiceEntityRepository
         }
     }
 
-        #[NoReturn] public function findAllEmptyQuery(int $number): Query
-        {
+    #[NoReturn] public function findAllEmptyQuery(int $number): Query
+    {
 //            SELECT * FROM  `race__car` , race__pilote where race__car.id not in (SELECT car_id from race__pilote) or race__car.id = race__pilote.car_id GROUP by race__car.id;
         $qb = $this->createQueryBuilder('p');
         $qb
@@ -57,7 +57,9 @@ class PiloteRepository extends ServiceEntityRepository
 //        dump($qb->getQuery()->getDQL());
 //        dd($qb->getQuery()->getSQL());
         return $qb->getQuery();
-    }
+        }
+
+
 
 //    /**
 //     * @return Pilote[] Returns an array of Pilote objects

@@ -38,3 +38,10 @@ services:
         class: App\Admin\TeamAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Team, manager_type: orm, label: 'Team' }
+
+#    gedmo.listener.softdeleteable:
+#        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+#        tags:
+#            - { name: doctrine.event_subscriber, connection: default }
+#        calls:
+#            - [ setAnnotationReader, [ '@annotation_reader' ] ]

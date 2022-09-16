@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class PiloteAdmin extends AbstractAdmin
 {
 
-    public function __construct(private PiloteRepository $piloteRepository, ?string $code = null, ?string $class = null, ?string $baseControllerName = null)
+    public function __construct(private CarRepository $carRepository, ?string $code = null, ?string $class = null, ?string $baseControllerName = null)
     {
         parent::__construct($code, $class, $baseControllerName);
     }
@@ -30,13 +30,16 @@ class PiloteAdmin extends AbstractAdmin
             ->add("lastName", TextType::class )
             ->add("number", TextType::class )
             ->add("country", TextType::class )
-            ->add("car", ModelType::class,[
+            ->add("cars", ModelType::class,[
                 "class" => Car::class,
-                "query" => $this->piloteRepository->findAllEmptyQuery(2),
+                "multiple" => true ,
+                "query" => $this->carRepository->findManyToManyQuery(),
 //                'btn_edit' => 'test'
 
             ])
+
         ;
+
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void

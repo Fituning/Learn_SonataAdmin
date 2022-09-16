@@ -7,11 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
 #[ORM\Table(name: "race__car")]
+//#[Gedmo\SoftDeletable(fieldName : "deleteAt")]
 class Car
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,8 +32,11 @@ class Car
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
-    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Pilote::class, cascade:["persist", "remove"])]
+    #[ORM\ManyToMany(targetEntity: Pilote::class, inversedBy: 'cars')]
     private Collection $pilotes;
+
+//    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Pilote::class, cascade:["persist", "remove"])]
+//    private Collection $pilotes;
 
 //    #[ORM\OneToOne(inversedBy: 'car', targetEntity: Pilote::class, cascade: ['persist'])]
 //    private ?Pilote $pilote = null;
@@ -118,33 +126,57 @@ class Car
 //        return $this;
 //    }
 
-    /**
-     * @return Collection<int, Pilote>
-     */
-    public function getPilotes(): Collection
-    {
-        return $this->pilotes;
+//    /**
+//     * @return Collection<int, Pilote>
+//     */
+//    public function getPilotes(): Collection
+//    {
+//        return $this->pilotes;
+//    }
+//
+//    public function addPilote(Pilote $pilote): self
+//    {
+//        if (!$this->pilotes->contains($pilote)) {
+//            $this->pilotes->add($pilote);
+//            $pilote->setCar($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removePilote(Pilote $pilote): self
+//    {
+//        if ($this->pilotes->removeElement($pilote)) {
+//            // set the owning side to null (unless already changed)
+//            if ($pilote->getCar() === $this) {
+//                $pilote->setCar(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+
+/**
+ * @return Collection<int, Pilote>
+ */
+public function getPilotes(): Collection
+{
+    return $this->pilotes;
+}
+
+public function addPilote(Pilote $pilote): self
+{
+    if (!$this->pilotes->contains($pilote)) {
+        $this->pilotes->add($pilote);
     }
 
-    public function addPilote(Pilote $pilote): self
-    {
-        if (!$this->pilotes->contains($pilote)) {
-            $this->pilotes->add($pilote);
-            $pilote->setCar($this);
-        }
+    return $this;
+}
 
-        return $this;
-    }
+public function removePilote(Pilote $pilote): self
+{
+    $this->pilotes->removeElement($pilote);
 
-    public function removePilote(Pilote $pilote): self
-    {
-        if ($this->pilotes->removeElement($pilote)) {
-            // set the owning side to null (unless already changed)
-            if ($pilote->getCar() === $this) {
-                $pilote->setCar(null);
-            }
-        }
-
-        return $this;
-    }
+    return $this;
+}
 }
