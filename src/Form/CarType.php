@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Car;
+use App\Repository\CarPiloteRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -11,14 +12,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CarType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+
+
+
+    public function buildForm( FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('color')
             ->add('power')
             ->add('team')
             ->add('pilotes', CollectionType::class, [
-                'entry_type' => PiloteType::class,
+                'entry_type' => CarPiloteType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,

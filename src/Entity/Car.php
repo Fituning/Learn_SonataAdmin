@@ -32,8 +32,11 @@ class Car
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
-    #[ORM\ManyToMany(targetEntity: Pilote::class, inversedBy: 'cars')]
+    #[ORM\OneToMany(mappedBy: 'car', targetEntity: CarPilote::class, cascade: ["persist", "remove"], orphanRemoval: true)]
     private Collection $pilotes;
+
+//    #[ORM\ManyToMany(targetEntity: Pilote::class, inversedBy: 'cars')]
+//    private Collection $pilotes;
 
 //    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Pilote::class, cascade:["persist", "remove"])]
 //    private Collection $pilotes;
@@ -156,26 +159,56 @@ class Car
 //        return $this;
 //    }
 
+///**
+// * @return Collection<int, Pilote>
+// */
+//public function getPilotes(): Collection
+//{
+//    return $this->pilotes;
+//}
+//
+//public function addPilote(Pilote $pilote): self
+//{
+//    if (!$this->pilotes->contains($pilote)) {
+//        $this->pilotes->add($pilote);
+//    }
+//
+//    return $this;
+//}
+//
+//public function removePilote(Pilote $pilote): self
+//{
+//    $this->pilotes->removeElement($pilote);
+//
+//    return $this;
+//}
+
 /**
- * @return Collection<int, Pilote>
+ * @return Collection<int, CarPilote>
  */
 public function getPilotes(): Collection
 {
     return $this->pilotes;
 }
 
-public function addPilote(Pilote $pilote): self
+public function addPilote(CarPilote $pilote): self
 {
     if (!$this->pilotes->contains($pilote)) {
         $this->pilotes->add($pilote);
+        $pilote->setCar($this);
     }
 
     return $this;
 }
 
-public function removePilote(Pilote $pilote): self
+public function removePilote(CarPilote $pilote): self
 {
-    $this->pilotes->removeElement($pilote);
+    if ($this->pilotes->removeElement($pilote)) {
+        // set the owning side to null (unless already changed)
+        if ($pilote->getCar() === $this) {
+            $pilote->setCar(null);
+        }
+    }
 
     return $this;
 }

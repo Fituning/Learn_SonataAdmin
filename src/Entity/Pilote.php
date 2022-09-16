@@ -32,8 +32,11 @@ class Pilote
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $number = null;
 
-    #[ORM\ManyToMany(targetEntity: Car::class, mappedBy: 'pilotes')]
+    #[ORM\OneToMany(mappedBy: 'pilote', targetEntity: CarPilote::class, cascade: ["persist", "remove"], orphanRemoval: true)]
     private Collection $cars;
+
+//    #[ORM\ManyToMany(targetEntity: Car::class, mappedBy: 'pilotes')]
+//    private Collection $cars;
 
 
 //    #[ORM\ManyToMany(targetEntity: Car::class, inversedBy: 'pilotes')]
@@ -44,9 +47,9 @@ class Pilote
         $this->cars = new ArrayCollection();
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
-        return (string) $this->firstName . " " . $this->lastName . " n°" . $this->number;
+        return (string)$this->firstName . " " . $this->lastName . " n°" . $this->number;
     }
 
 
@@ -115,28 +118,58 @@ class Pilote
         return $this;
     }
 
+//    /**
+//     * @return Collection<int, Car>
+//     */
+//    public function getCars(): Collection
+//    {
+//        return $this->cars;
+//    }
+//
+//    public function addCar(Car $car): self
+//    {
+//        if (!$this->cars->contains($car)) {
+//            $this->cars->add($car);
+//            $car->addPilote($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeCar(Car $car): self
+//    {
+//        if ($this->cars->removeElement($car)) {
+//            $car->removePilote($this);
+//        }
+//
+//        return $this;
+//    }
+
     /**
-     * @return Collection<int, Car>
+     * @return Collection<int, CarPilote>
      */
     public function getCars(): Collection
     {
         return $this->cars;
     }
 
-    public function addCar(Car $car): self
+    public function addCar(CarPilote $car): self
     {
         if (!$this->cars->contains($car)) {
             $this->cars->add($car);
-            $car->addPilote($this);
+            $car->setPilote($this);
         }
 
         return $this;
     }
 
-    public function removeCar(Car $car): self
+    public function removeCar(CarPilote $car): self
     {
         if ($this->cars->removeElement($car)) {
-            $car->removePilote($this);
+            // set the owning side to null (unless already changed)
+            if ($car->getPilote() === $this) {
+                $car->setPilote(null);
+            }
         }
 
         return $this;

@@ -14,20 +14,21 @@ class PiloteType extends AbstractType
         $builder->add('firstName')
             ->add('lastName')
             ->add('number')
-            ->add('country')
-        ;
+            ->add('country');
     }
 
-    public function getBlockPrefix() : string
+    public function getBlockPrefix(): string
     {
         return 'pilote';
+
+
     }
 
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-           'data_class' => Pilote::class
+            'data_class' => Pilote::class
         ]);
     }
 

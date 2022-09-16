@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\CarPilote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * @extends ServiceEntityRepository<CarPilote>
@@ -39,6 +41,18 @@ class CarPiloteRepository extends ServiceEntityRepository
         }
     }
 
+    #[NoReturn] public function findNewPilotesQuery(): Query
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb
+            ->leftJoin('c.pilote', 'cp')
+            ->leftJoin('cp.cars', 'p');
+//            ->andWhere("c != cp.car ");
+
+//        dump($qb->getQuery()->getDQL());
+//        dd($qb->getQuery()->getSQL());
+        return $qb->getQuery();
+    }
 //    /**
 //     * @return CarPilote[] Returns an array of CarPilote objects
 //     */
