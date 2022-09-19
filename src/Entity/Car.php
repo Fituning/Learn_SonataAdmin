@@ -33,6 +33,7 @@ class Car
     private ?Team $team = null;
 
     #[ORM\OneToMany(mappedBy: 'car', targetEntity: CarPilote::class, cascade: ["persist", "remove"], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     private Collection $pilotes;
 
 //    #[ORM\ManyToMany(targetEntity: Pilote::class, inversedBy: 'cars')]

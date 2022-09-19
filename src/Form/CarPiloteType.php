@@ -24,14 +24,10 @@ class CarPiloteType extends AbstractType
         $builder
             ->add('pilote', EntityType::class, [
                 'class' => Pilote::class,
-//                "query" => $this->carPiloteRepository->findNewPilotesQuery(),
-//                'entry_type' => PiloteType::class,
-//                'entry_options' => ['label' => false],
-//                'allow_add' => true,
-//                'allow_delete' => true,
-//                'by_reference' => false,
-                "block_prefix" => 'custom_entity'
+                "block_prefix" => 'pilote'
             ]);
+//            ->add('pilote', PiloteType::class, [
+//            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

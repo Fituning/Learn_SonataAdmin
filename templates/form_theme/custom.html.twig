@@ -6,41 +6,39 @@
         <button type="button" data-collection-target="addBtn" data-action="click->collection#add">add</button>
         <div data-collection-target="list">
             {% for child in form.children %}
-                {#                <div data-collection-target="item"> #}
-                {#                {{ dump(child) }} #}
                 {{- form_widget(child) -}}
-                {#                </div> #}
             {% endfor %}
         </div>
-{#        <button type="button" data-collection-target="addBtn" data-action="click->collection#add">add</button>#}
+        {#        <button type="button" data-collection-target="addBtn" data-action="click->collection#add">add</button> #}
     </div>
 {% endblock %}
 
 
-{% block custom_entity_widget %}
+{% block pilote_row %}
     {#    <div data-collection-target="item"> #}
     {{ form_widget(form) }}
+
     <button type="button" data-collection-target="deleteBtn" data-action="click->collection#delete">
         remove
     </button>
-    {#    </div> #}
+    <br>
+    <button type="button" data-collection-target="deleteBtn" data-action="click->collection#up">
+        move up
+    </button>
+    <button type="button" data-collection-target="deleteBtn" data-action="click->collection#down">
+        move down
+    </button>
 
+
+
+    {#    </div> #}
 {% endblock %}
 
- {% block pilote_widget %}
-     {#    <div data-collection-target="item"> #}
-     {#        {{- block('form_widget') -}} #}
-     {#        <button type="button" data-collection-target="deleteBtn" data-action="click->collection#delete"> #}
-     {#            remove #}
-     {#        </button> #}
-     {#    </div> #}
- {% endblock %}
-
  {% block car_pilote_widget %}
+{#     {{ dump(form.value()) }}#}
+     {{ dump(form) }}
      <div data-collection-target="item">
          {{- block('form_widget') -}}
-{#         <button type="button" data-collection-target="deleteBtn" data-action="click->collection#delete">#}
-{#             remove#}
-{#         </button>#}
      </div>
+
  {% endblock %}

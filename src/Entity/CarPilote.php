@@ -15,7 +15,7 @@ class CarPilote
 
 
     #[ORM\Id]
-    #[ORM\ManyToOne(inversedBy: 'cars')]
+    #[ORM\ManyToOne(cascade: ["persist", "remove"], inversedBy: 'cars')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Pilote $pilote = null;
 
@@ -24,7 +24,7 @@ class CarPilote
     #[ORM\JoinColumn(nullable: false)]
     private ?Car $car = null;
 
-    #[Gedmo\SortablePosition]
+//    #[Gedmo\SortablePosition]
     #[ORM\Column(nullable: true)]
     private ?int $position = null;
 
