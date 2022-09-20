@@ -15,7 +15,7 @@
 
 
 {% block pilote_row %}
-    {#    <div data-collection-target="item"> #}
+    {#    <div> #}
     {{ form_widget(form) }}
 
     <button type="button" data-collection-target="deleteBtn" data-action="click->collection#delete">
@@ -28,17 +28,28 @@
     <button type="button" data-collection-target="deleteBtn" data-action="click->collection#down">
         move down
     </button>
-
-
-
     {#    </div> #}
 {% endblock %}
 
  {% block car_pilote_widget %}
-{#     {{ dump(form.value()) }}#}
-     {{ dump(form) }}
-     <div data-collection-target="item">
+     {#     {{ dump(form.value()) }} #}
+     {#          {{ dump(form.position.vars.value) }} #}
+     <div data-collection-target="item" data-entry-id="{{ form.position.vars.value }}">
          {{- block('form_widget') -}}
      </div>
 
  {% endblock %}
+
+{% block position_row %}
+{#    <div data-collection-target="position">#}
+{#        {{- block('form_widget') -}}#}
+        {{ form_row(form, { 'attr':{'data-collection-target':'position'} }) }}
+{#    </div>#}
+    {#        <p> position : {{ form.vars.value }} </p> #}
+{% endblock %}
+
+{#{% block position_widget %}#}
+{#    {% set foo = 'bar' %}#}
+{#    #}
+{#{% endblock %}#}
+

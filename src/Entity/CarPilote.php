@@ -25,8 +25,14 @@ class CarPilote
     private ?Car $car = null;
 
 //    #[Gedmo\SortablePosition]
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?int $position = null;
+
+//    public function __toString(): string
+//    {
+//        return (string) $this->position;
+//    }
+
 
     public function getPosition(): ?int
     {

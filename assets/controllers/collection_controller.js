@@ -14,7 +14,7 @@ export default class extends Controller {
         prototype: String
     }
 
-    static targets = ["list", "deleteBtn", "addBtn", "item"]
+    static targets = ["list", "deleteBtn", "addBtn", "item", "position"]
     counter = 0;
 
     connect() {
@@ -50,16 +50,72 @@ export default class extends Controller {
     }
 
     up(event) {
-        console.log('event')
-        console.log(event)
-        // console.log(event.target.closest("[data-collection-target=\"item\"]"))
-        console.log(event.target.closest("div").vars)
-        // console.log(event.params)
 
+        // const selectedItem = event.target.closest("[data-collection-target=\"item\"]")
+        // const brutData = selectedItem.dataset.entryId
+        // const input = selectedItem.querySelector('input')
+        //
+        // if (input.value > 1) {
+        //     input.setAttribute('value', parseInt(input.value, 10) - 1)
+        //
+        //     const other = this.listTarget.querySelector(" [value=\"" + input.value.toString() + "\"] ")
+        //     const selectedOther = other.closest("[data-collection-target=\"item\"]")
+        //
+        //     other.setAttribute('value', parseInt(other.value, 10) + 1)
+        //
+        //     this.listTarget.insertBefore(selectedItem,selectedOther)
+        //
+        // }else{
+        //     console.log("ERROR")
+        // }
+
+        const selectedItem = event.target.closest("[data-collection-target=\"item\"]")
+        // const brutData = selectedItem.dataset.entryId
+        const selectedPosition = selectedItem.querySelector('input')
+
+        if (selectedPosition.value > 1) {
+            const newPostion = parseInt(selectedPosition.value, 10) - 1
+
+            const otherItem = this.listTarget.querySelector(" [data-collection-target=\"position\"][value=\""+ newPostion.toString()  +"\"] ")
+            const otherPosition = otherItem.closest("[data-collection-target=\"item\"]")
+
+            selectedPosition.setAttribute('value', parseInt(selectedPosition.value, 10) - 1)
+
+            otherItem.setAttribute('value', parseInt(otherItem.value, 10) + 1)
+
+            // this.listTarget.removeChild(selectedItem)
+            // this.listTarget.insertBefore(selectedItem,otherPosition.nextElementSibling)
+            this.listTarget.insertBefore(selectedItem,otherPosition)
+
+        }else{
+            console.log("ALREADY FIRST")
+        }
 
     }
 
-    down(event) {
 
+    down(event) {
+        const selectedItem = event.target.closest("[data-collection-target=\"item\"]")
+        // const brutData = selectedItem.dataset.entryId
+        const selectedPosition = selectedItem.querySelector('input')
+
+        if (selectedPosition.value < this.itemTargets.length) {
+            const newPostion = parseInt(selectedPosition.value, 10) +1
+
+            const otherItem = this.listTarget.querySelector(" [data-collection-target=\"position\"][value=\""+ newPostion.toString()  +"\"] ")
+            const otherPosition = otherItem.closest("[data-collection-target=\"item\"]")
+
+            selectedPosition.setAttribute('value', parseInt(selectedPosition.value, 10) + 1)
+
+            otherItem.setAttribute('value', parseInt(otherItem.value, 10) - 1)
+
+            // this.listTarget.insertBefore(other.closest("[data-collection-target=\"item\"]"),selectedItem)
+            // this.listTarget.removeChild(selectedItem)
+            // this.listTarget.insertBefore(selectedItem,otherPosition.nextElementSibling)
+            this.listTarget.insertBefore(otherPosition,selectedItem)
+
+        }else{
+            console.log("ALREADY LAST")
+        }
     }
 }
